@@ -1,5 +1,6 @@
 import 'package:danaku/constant/constants.dart';
 import 'package:danaku/ui/pages/dashboard_page.dart';
+import 'package:danaku/ui/widgets/button_primary.dart';
 import 'package:danaku/ui/widgets/first_form_header.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,7 @@ class FormUser extends StatefulWidget {
 
 class _FormUserState extends State<FormUser> {
   bool _autoValidate = false;
+  bool _isTrueBigger = true;
   final _formKey = GlobalKey<FormState>();
   TextEditingController textName = new TextEditingController();
   TextEditingController textIncome = new TextEditingController();
@@ -56,11 +58,14 @@ class _FormUserState extends State<FormUser> {
                       controller: textName,
                       keyboardType: TextInputType.text,
                       validator: (value) {
-                        if (value.length < 3) {
-                          print('is empty');
+                        if (value.isEmpty) {
+                          return 'Field empty !';
+                        } else if (value.length < 3) {
                           return 'Field should be more than 3 charater';
                         } else if (value.length >= 15) {
                           return 'Field should be less than 15 charater';
+                        } else {
+                          return null;
                         }
                       },
                       decoration: InputDecoration(
@@ -86,11 +91,12 @@ class _FormUserState extends State<FormUser> {
                       controller: textIncome,
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if (int.parse(value) <= 0) {
-                          print('is empty');
-                          return 'Value cannot be zero';
-                        } else if (value.length < 0) {
+                        if (value.isEmpty) {
                           return 'Field empty !';
+                        } else if (int.parse(value) <= 0) {
+                          return 'Value cannot be zero';
+                        } else {
+                          return null;
                         }
                       },
                       decoration: InputDecoration(
@@ -116,11 +122,12 @@ class _FormUserState extends State<FormUser> {
                       controller: textSaving,
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if (int.parse(value) <= 0) {
-                          print('is empty');
-                          return 'Value cannot be zero';
-                        } else if (value.length < 0) {
+                        if (value.isEmpty) {
                           return 'Field empty !';
+                        } else if (int.parse(value) <= 0) {
+                          return 'Value cannot be zero';
+                        } else {
+                          return null;
                         }
                       },
                       decoration: InputDecoration(
@@ -142,40 +149,21 @@ class _FormUserState extends State<FormUser> {
             ButtonPrimary(
               text: "Submit",
               onClick: () {
-                register();
+                // if INCOME IS LESS THAN SAVING
+                if (int.parse(textSaving.text) >= int.parse(textIncome.text)) {
+                  setState(() {
+                    _isTrueBigger = false;
+                  });
+                } else {
+                  register();
+                }
               },
+            ),
+            Text(
+              _isTrueBigger ? "" : "Income is less than saving",
+              style: TextStyle(color: Colors.red),
             )
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class ButtonPrimary extends StatelessWidget {
-  final Function onClick;
-  final String text;
-
-  const ButtonPrimary({Key key, this.onClick, this.text}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      color: Colors.white,
-      onPressed: onClick,
-      child: Container(
-        width: 330,
-        height: 50,
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              color: colorSecondary,
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
-            ),
-          ),
         ),
       ),
     );
