@@ -12,9 +12,10 @@ class FirstFormHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(top: 50, left: 20, right: 20),
       padding: EdgeInsets.all(10),
       width: size.width,
-      height: 200,
+      height: 170,
       decoration: BoxDecoration(
           color: colorSecondary,
           borderRadius: BorderRadius.circular(25),
