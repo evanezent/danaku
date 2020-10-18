@@ -60,6 +60,7 @@ class _DashboardState extends State<Dashboard> {
                 ],
               ),
             ),
+            SizedBox(height: size.height*0.1),
             Container(
               margin: EdgeInsets.only(top: 50, left: 20, right: 20),
               padding: EdgeInsets.all(14),
