@@ -5,18 +5,16 @@ const colorSecondary = Color(0xFF19C6B5);
 
 List<BoxShadow> darkShadow = [
   BoxShadow(
-      offset: Offset(0, 10),
-      blurRadius: 10.0,
-      spreadRadius: 0.05,
-      color: Colors.black12)
-];
-
-List<BoxShadow> primaryShadow = [
-  BoxShadow(
-    color: colorPrimary,
-    offset: Offset(0, 0),
-    blurRadius: 20,
+    color: Colors.white38,
+    offset: Offset(0, 5),
+    blurRadius: 8,
   )
 ];
 
-
+List<BoxShadow> navShadow = [
+  BoxShadow(
+      color: Colors.white38,
+      offset: Offset(0, 0),
+      blurRadius: 10,
+      spreadRadius: 4)
+];
