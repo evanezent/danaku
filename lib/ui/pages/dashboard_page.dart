@@ -101,8 +101,6 @@ class _DashboardState extends State<Dashboard> {
                             return 'Field empty !';
                           } else if (value.length < 3) {
                             return 'Field should be more than 3 charater';
-                          } else if (value.length >= 15) {
-                            return 'Field should be less than 15 charater';
                           } else {
                             return null;
                           }
@@ -171,7 +169,8 @@ class _DashboardState extends State<Dashboard> {
                     SizedBox(height: 20),
                     Center(
                       child: RaisedButton(
-                        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         color: Colors.white,
