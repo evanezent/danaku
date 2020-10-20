@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const colorPrimary = Color(0xFF24292E);
 const colorSecondary = Color(0xFF19C6B5);
+const colorBackup = Color(0xFFd1082d);
 
 List<BoxShadow> darkShadow = [
   BoxShadow(

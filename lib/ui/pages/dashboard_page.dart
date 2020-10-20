@@ -1,4 +1,5 @@
 import 'package:danaku/constant/constants.dart';
+import 'package:danaku/ui/pages/report_list_page.dart';
 import 'package:danaku/ui/widgets/dashboard_header.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: colorPrimary,
       body: Container(
         child: Column(
@@ -34,7 +36,9 @@ class _DashboardState extends State<Dashboard> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: navShadow),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ReportList()));
+                      },
                       child: Icon(
                         Icons.list_sharp,
                         color: colorSecondary,
