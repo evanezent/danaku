@@ -36,11 +36,9 @@ class _DashboardState extends State<Dashboard> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: navShadow),
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ReportList()));
-                      },
+                      onTap: () {},
                       child: Icon(
-                        Icons.list_sharp,
+                        Icons.person_pin,
                         color: colorSecondary,
                         size: 50,
                       ),
@@ -54,9 +52,14 @@ class _DashboardState extends State<Dashboard> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: navShadow),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ReportList()));
+                      },
                       child: Icon(
-                        Icons.person_pin,
+                        Icons.list_sharp,
                         color: colorSecondary,
                         size: 50,
                       ),
