@@ -19,13 +19,13 @@ class _LandingPageState extends State<LandingPage> {
   int count = 0;
 
   void getInitData() {
-    final Future<Database> dbFuture = dbHelper.initDatabase('todos.db');
+    final Future<Database> dbFuture = dbHelper.initDatabase('user.db');
     dbFuture.then((database) {
-      Future<List<User>> todoListFuture = dbHelper.getAllUser();
-      todoListFuture.then((todoList) {
+      Future<List<User>> userListFuture = dbHelper.getAllUser();
+      userListFuture.then((userList) {
         setState(() {
-          this.userList = todoList;
-          this.count = todoList.length;
+          this.userList = userList;
+          this.count = userList.length;
         });
       });
     });
