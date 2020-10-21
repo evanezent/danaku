@@ -34,10 +34,6 @@ class _FormUserState extends State<FormUser> {
       userData = User(textName.text, double.parse(textIncome.text),
           double.parse(textSaving.text));
 
-      // userData.setName = textName.text;
-      // userData.setIncome = textIncome.text;
-      // userData.setSaving = textSaving.text;
-
       int result = await dbHelper.insertDB(userData);
 
       result != 0
@@ -51,7 +47,7 @@ class _FormUserState extends State<FormUser> {
         });
       } else {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Dashboard()));
+            context, MaterialPageRoute(builder: (context) => Dashboard(userData: userData)));
       }
     } else {
       setState(() {
