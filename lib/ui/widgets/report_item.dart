@@ -1,4 +1,5 @@
 import 'package:danaku/constant/constants.dart';
+import 'package:danaku/ui/widgets/form_outcome.dart';
 import 'package:flutter/material.dart';
 
 class ReportItem extends StatelessWidget {
@@ -20,17 +21,17 @@ class ReportItem extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 6, horizontal: 10),
         width: size.width,
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(25),
-            // boxShadow: darkShadow
-            ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(25),
+          // boxShadow: darkShadow
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               child: Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -56,12 +57,44 @@ class ReportItem extends StatelessWidget {
                 ),
               ),
             ),
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {},
-              // color: Colors.redAccent[200],
-              color: colorBackup,
-            )
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        backgroundColor: Colors.transparent,
+                        content: Container(
+                            height: size.height * 0.4,
+                            child: FormOutcoume("Update", () {}, size.width)),
+                      );
+                    },
+                    );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: colorSecondary),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Icon(
+                    Icons.edit,
+                    color: colorSecondary,
+                  ),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                decoration: BoxDecoration(),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Icon(Icons.delete, color: colorBackup),
+                ),
+              ),
+            ),
           ],
         ));
   }

@@ -16,6 +16,5 @@ List<BoxShadow> navShadow = [
   BoxShadow(
       color: Colors.white38,
       offset: Offset(0, 0),
-      blurRadius: 10,
-      spreadRadius: 4)
+      blurRadius: 5,)
 ];
