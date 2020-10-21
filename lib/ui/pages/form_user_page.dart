@@ -5,7 +5,6 @@ import 'package:danaku/ui/widgets/button_primary.dart';
 import 'package:danaku/ui/widgets/first_form_header.dart';
 import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 
 class FormUser extends StatefulWidget {
   @override
