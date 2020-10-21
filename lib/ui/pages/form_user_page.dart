@@ -1,8 +1,11 @@
 import 'package:danaku/constant/constants.dart';
+import 'package:danaku/models/user.dart';
 import 'package:danaku/ui/pages/dashboard_page.dart';
 import 'package:danaku/ui/widgets/button_primary.dart';
 import 'package:danaku/ui/widgets/first_form_header.dart';
+import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 class FormUser extends StatefulWidget {
   @override
@@ -17,10 +20,24 @@ class _FormUserState extends State<FormUser> {
   TextEditingController textIncome = new TextEditingController();
   TextEditingController textSaving = new TextEditingController();
 
-  void register() {
+  // Initializing Database
+  DatabaseHelper dbHelper = DatabaseHelper();
+  User userData;
+
+  void register() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       print("form validate");
+
+      userData.setName = textName.text;
+      userData.setIncome = double.parse(textIncome.text);
+      userData.setSaving = double.parse(textSaving.text);
+
+      int result = await dbHelper.insertDB(userData);
+
+      result != 0
+          ? _showAlertDialog("Success", "Data successfully added !")
+          : _showAlertDialog("Failed", "Error while add data !");
 
       // if INCOME IS LESS THAN SAVING
       if (int.parse(textSaving.text) >= int.parse(textIncome.text)) {
@@ -36,6 +53,14 @@ class _FormUserState extends State<FormUser> {
         _autoValidate = true;
       });
     }
+  }
+
+  void _showAlertDialog(String title, String message) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    showDialog(context: context, builder: (_) => alertDialog);
   }
 
   @override

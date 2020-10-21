@@ -1,8 +1,12 @@
 import 'dart:async';
 
 import 'package:danaku/constant/constants.dart';
+import 'package:danaku/models/user.dart';
+import 'package:danaku/ui/pages/dashboard_page.dart';
 import 'package:danaku/ui/pages/form_user_page.dart';
+import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -10,13 +14,34 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  DatabaseHelper dbHelper = DatabaseHelper();
+  List<User> userList;
+  int count = 0;
+
+  void getInitData() {
+    final Future<Database> dbFuture = dbHelper.initDatabase('todos.db');
+    dbFuture.then((database) {
+      Future<List<User>> todoListFuture = dbHelper.getAllUser();
+      todoListFuture.then((todoList) {
+        setState(() {
+          this.userList = todoList;
+          this.count = todoList.length;
+        });
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    this.getInitData();
     Timer(
         Duration(seconds: 5),
-        () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => FormUser())));
+        () => count == 0
+            ? Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => FormUser()))
+            : Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => Dashboard())));
   }
 
   @override
