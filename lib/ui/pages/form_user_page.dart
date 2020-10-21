@@ -12,6 +12,10 @@ class FormUser extends StatefulWidget {
 }
 
 class _FormUserState extends State<FormUser> {
+  // Initializing Database
+  DatabaseHelper dbHelper = DatabaseHelper();
+  User userData;
+
   bool _autoValidate = false;
   bool _isTrueBigger = true;
   final _formKey = GlobalKey<FormState>();
@@ -19,18 +23,20 @@ class _FormUserState extends State<FormUser> {
   TextEditingController textIncome = new TextEditingController();
   TextEditingController textSaving = new TextEditingController();
 
-  // Initializing Database
-  DatabaseHelper dbHelper = DatabaseHelper();
-  User userData;
-
   void register() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       print("form validate");
+      print(textName.text);
+      print(textIncome.text);
+      print(textSaving.text);
 
-      userData.setName = textName.text;
-      userData.setIncome = double.parse(textIncome.text);
-      userData.setSaving = double.parse(textSaving.text);
+      userData = User(textName.text, double.parse(textIncome.text),
+          double.parse(textSaving.text));
+
+      // userData.setName = textName.text;
+      // userData.setIncome = textIncome.text;
+      // userData.setSaving = textSaving.text;
 
       int result = await dbHelper.insertDB(userData);
 
@@ -161,7 +167,6 @@ class _FormUserState extends State<FormUser> {
                             } else if (int.parse(value) <= 0) {
                               return 'Value cannot be zero';
                             } else {
-                              print("KOSONG");
                               return null;
                             }
                           },

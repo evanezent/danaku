@@ -17,15 +17,15 @@ class User {
     }
   }
 
-  set setIncome(double newIncome) {
-    if (newIncome > 0) {
-      this._income = newIncome;
+  set setIncome(String newIncome) {
+    if (newIncome.length > 0) {
+      this._income = double.parse(newIncome);
     }
   }
 
-  set setSaving(double newSaving) {
-    if (newSaving > 0) {
-      this._saving = newSaving;
+  set setSaving(String newSaving) {
+    if (newSaving.length > 0) {
+      this._saving = double.parse(newSaving);
     }
   }
 

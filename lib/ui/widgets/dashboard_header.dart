@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({
-    Key key,
+    Key key, this.nickname, this.income, this.saving,
   }) : super(key: key);
+
+  final String nickname;
+  final double income;
+  final double saving;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class DashboardHeader extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 15),
               children: <TextSpan>[
                 TextSpan(
-                    text: 'Username !',
+                    text: '$nickname !',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -39,11 +43,9 @@ class DashboardHeader extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            "Rp 1500000 / 2000000",
+            "Rp 1500000 / $income",
             style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 25),
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
           ),
           SizedBox(height: 10),
           RichText(
@@ -55,7 +57,7 @@ class DashboardHeader extends StatelessWidget {
                   fontSize: 15),
               children: <TextSpan>[
                 TextSpan(
-                    text: 'Rp 300.000',
+                    text: 'Rp $saving',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

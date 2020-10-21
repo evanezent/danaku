@@ -1,20 +1,47 @@
 import 'package:danaku/constant/constants.dart';
+import 'package:danaku/models/user.dart';
 import 'package:danaku/ui/pages/profile_page.dart';
 import 'package:danaku/ui/pages/report_list_page.dart';
 import 'package:danaku/ui/widgets/dashboard_header.dart';
 import 'package:danaku/ui/widgets/form_outcome.dart';
+import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 class Dashboard extends StatefulWidget {
+  final User userData;
+
+  const Dashboard({Key key, this.userData}) : super(key: key);
   @override
-  _DashboardState createState() => _DashboardState();
+  _DashboardState createState() => _DashboardState(userData);
 }
 
 class _DashboardState extends State<Dashboard> {
+  final User user;
+  DatabaseHelper dbHelper = DatabaseHelper();
+  List<User> userList;
+  int count = 0;
+
+  _DashboardState(this.user);
+
+  void getInitData() {
+    final Future<Database> dbFuture = dbHelper.initDatabase('user.db');
+    dbFuture.then((database) {
+      Future<List<User>> userListFuture = dbHelper.getAllUser();
+      userListFuture.then((userList) {
+        setState(() {
+          this.userList = userList;
+          this.count = userList.length;
+        });
+      });
+    });
+  }
+
   @override
   void initState() {
-    // 
+    //
     super.initState();
+    // this.getInitData();
   }
 
   @override
@@ -28,7 +55,11 @@ class _DashboardState extends State<Dashboard> {
         child: Column(
           children: [
             SizedBox(height: 20),
-            DashboardHeader(),
+            DashboardHeader(
+              nickname: user.name,
+              income: user.income,
+              saving: user.saving,
+            ),
             SizedBox(height: size.height * 0.12),
             Container(
               child: Row(

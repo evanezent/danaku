@@ -41,7 +41,7 @@ class _LandingPageState extends State<LandingPage> {
             ? Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => FormUser()))
             : Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Dashboard())));
+                context, MaterialPageRoute(builder: (context) => Dashboard(userData: userList[0]))));
   }
 
   @override
