@@ -32,6 +32,7 @@ dependencies:
   sqflite:
   path_provider:
   intl:
+  flutter_money_formatter:
 
 dev_dependencies:
   flutter_test:

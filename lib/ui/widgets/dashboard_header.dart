@@ -1,5 +1,6 @@
 import 'package:danaku/constant/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({
@@ -10,8 +11,12 @@ class DashboardHeader extends StatelessWidget {
   final double income;
   final double saving;
 
+
   @override
   Widget build(BuildContext context) {
+
+    FlutterMoneyFormatter fIncome = FlutterMoneyFormatter(amount: income);
+    FlutterMoneyFormatter fSaving = FlutterMoneyFormatter(amount: saving);
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(top: 50, left: 20, right: 20),
@@ -26,7 +31,6 @@ class DashboardHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 10),
           RichText(
             text: TextSpan(
               text: 'Halo ',
@@ -37,15 +41,15 @@ class DashboardHeader extends StatelessWidget {
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 15)),
+                        fontSize: 16)),
               ],
             ),
           ),
           SizedBox(height: 10),
           Text(
-            "Rp 1500000 / $income",
+            "Rp 1500000 / ${fIncome.output.nonSymbol}",
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
           ),
           SizedBox(height: 10),
           RichText(
@@ -57,7 +61,7 @@ class DashboardHeader extends StatelessWidget {
                   fontSize: 15),
               children: <TextSpan>[
                 TextSpan(
-                    text: 'Rp $saving',
+                    text: 'Rp ${fSaving.output.nonSymbol}',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
