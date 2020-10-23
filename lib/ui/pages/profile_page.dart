@@ -1,16 +1,82 @@
 import 'package:danaku/constant/constants.dart';
+import 'package:danaku/models/user.dart';
+import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sqflite/sqflite.dart';
+// import 'package:toast/toast.dart';
 
 class ProfilePage extends StatefulWidget {
+  final String name;
+  final double income;
+  final double saving;
+  final int id;
+
+  const ProfilePage({Key key, this.name, this.income, this.saving, this.id})
+      : super(key: key);
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _ProfilePageState createState() =>
+      _ProfilePageState(name, income, saving, id);
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final int _id;
+  final String name;
+  final double income;
+  final double saving;
+  User userData;
+  DatabaseHelper dbHelper = DatabaseHelper();
+  bool isSuccess;
+  FToast fToast;
+
+  _ProfilePageState(this.name, this.income, this.saving, this._id);
+
   final _formKey = GlobalKey<FormState>();
-  TextEditingController textNickname = new TextEditingController();
-  TextEditingController textIncome = new TextEditingController();
-  TextEditingController textSaving = new TextEditingController();
+  var textNickname = new TextEditingController();
+  var textIncome = new TextEditingController();
+  var textSaving = new TextEditingController();
+  List<User> userList;
+  int count = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    fToast = FToast();
+    textNickname.text = this.name;
+    textIncome.text = this.income.toStringAsFixed(0);
+    textSaving.text = this.saving.toStringAsFixed(0);
+    userData = User.withId(this._id, this.name, this.income, this.saving);
+  }
+
+  void updateUser(User newUser) {
+    setState(() => this.userData = newUser);
+  }
+
+  void updateData(User user) async {
+    User newUser = User.withId(user.id, textNickname.text,
+        double.parse(textIncome.text), double.parse(textSaving.text));
+    int res = await dbHelper.updateDB(newUser);
+
+    res == 0
+        ? Fluttertoast.showToast(
+            msg: "Update Success",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: colorSecondary,
+            textColor: Colors.white,
+          )
+        : Fluttertoast.showToast(
+            msg: "Update Failed !",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: colorBackup,
+            textColor: Colors.white,
+          );
+    this.userData.setName = textNickname.text;
+    this.userData.setIncome = textIncome.text;
+    this.userData.setSaving = textSaving.text;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +142,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           }
                         },
                         decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 5),
                             hintText: "nickname",
                             labelText: "nickname",
                             hintStyle: TextStyle(
@@ -189,7 +255,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(height: 40),
                 Center(
                   child: RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      updateData(userData);
+                    },
                     color: colorSecondary,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25)),
@@ -210,7 +278,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Center(
                   child: RaisedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pop(context, this.userData);
                       FocusScope.of(context).unfocus();
                     },
                     color: Colors.white,
@@ -221,14 +289,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       width: size.width * 0.7,
                       child: Center(
                         child: Text(
-                          "Cancel",
+                          "Back",
                           style: TextStyle(
-                              color: colorSecondary, fontWeight: FontWeight.w600),
+                              color: colorSecondary,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

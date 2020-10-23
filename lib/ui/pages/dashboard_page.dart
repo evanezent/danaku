@@ -19,7 +19,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  final User user;
+  User user;
   var _formKey = GlobalKey<FormState>();
   DatabaseHelper dbHelper = DatabaseHelper();
   Item itemData;
@@ -70,6 +70,10 @@ class _DashboardState extends State<Dashboard> {
     setState(() => this.outcome = outcome);
   }
 
+  void updateUser(User newUser) {
+    setState(() => this.user = newUser);
+  }
+
   @override
   void initState() {
     //
@@ -94,17 +98,24 @@ class _DashboardState extends State<Dashboard> {
               saving: user.saving,
               outcome: outcome,
             ),
+            // Text("${user.id}",
+            // style: TextStyle(fontSize: 30, color: Colors.white)),
             SizedBox(height: size.height * 0.12),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      final newUser = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ProfilePage()));
+                              builder: (context) => ProfilePage(
+                                    name: user.name,
+                                    income: user.income,
+                                    saving: user.saving,
+                                  )));
+                      updateUser(newUser);
                     },
                     child: Container(
                       padding: EdgeInsets.all(16),
