@@ -24,8 +24,8 @@ class _DashboardState extends State<Dashboard> {
   DatabaseHelper dbHelper = DatabaseHelper();
   Item itemData;
   double outcome;
-  TextEditingController textItem = new TextEditingController();
-  TextEditingController textPrice = new TextEditingController();
+  var textItem = TextEditingController();
+  var textPrice = TextEditingController();
   _DashboardState(this.user);
 
   void _showAlertDialog(String title, String message) {
