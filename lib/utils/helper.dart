@@ -1,3 +1,4 @@
+import 'package:danaku/models/item.dart';
 import 'package:danaku/models/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
@@ -8,11 +9,17 @@ class DatabaseHelper {
   static DatabaseHelper _helper;
   static Database _database;
 
+  // USER TABLE
   String userTable = 'user_table';
   String colID = 'id';
   String colName = 'name';
   String colIncome = 'income';
   String colSaving = 'saving';
+
+  // ITEM TABLE
+  String itemTable = 'item_table';
+  String colDate = 'date';
+  String colPrice = 'price';
 
   DatabaseHelper._createInstance();
 
@@ -24,9 +31,16 @@ class DatabaseHelper {
   }
 
   void _createDb(Database db, int newVersion) async {
+    // Create User Table
     await db.execute(
         'CREATE TABLE $userTable($colID INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, '
         '$colIncome DOUBLE, $colSaving DOUBLE)');
+    print("User table created");
+    //Create Item Table
+    await db.execute(
+        'CREATE TABLE $itemTable($colID INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, '
+        '$colDate TEXT, $colPrice DOUBLE)');
+    print("Item table created");
   }
 
   Future<Database> initDatabase(String dbName) async {
@@ -53,6 +67,8 @@ class DatabaseHelper {
 
     if (data is User) {
       result = await db.insert(userTable, data.toMap());
+    } else if (data is Item) {
+      result = await db.insert(itemTable, data.toMap());
     }
 
     return result;
@@ -66,6 +82,9 @@ class DatabaseHelper {
     if (data is User) {
       result = await db.update(userTable, data.toMap(),
           where: '$colID = ?', whereArgs: [data.id]);
+    } else if (data is Item) {
+      result = await db.update(itemTable, data.toMap(),
+          where: '$colID = ?', whereArgs: [data.getID]);
     }
 
     return result;
@@ -78,6 +97,8 @@ class DatabaseHelper {
 
     if (dbType == "user") {
       result = await db.rawDelete('DELETE FROM $userTable WHERE $colID = $id');
+    } else if (dbType == "item") {
+      result = await db.rawDelete('DELETE FROM $itemTable WHERE $colID = $id');
     }
 
     return result;
@@ -90,6 +111,8 @@ class DatabaseHelper {
 
     if (dbType == "user") {
       result = await db.rawDelete('DELETE (*) FROM $userTable');
+    } else if (dbType == "item") {
+      result = await db.rawDelete('DELETE FROM $itemTable');
     }
 
     return result;
@@ -102,10 +125,12 @@ class DatabaseHelper {
 
     if (dbType == "user") {
       x = await db.rawQuery('SELECT COUNT (*) from $userTable');
+    } else if (dbType == "item") {
+      x = await db.rawQuery('SELECT COUNT (*) from $itemTable');
     }
 
     int result = Sqflite.firstIntValue(x);
-    return result;
+    return result != null ? result : 0;
   }
 
   // Fetch Operation: Get all object from database
@@ -127,5 +152,38 @@ class DatabaseHelper {
     }
 
     return userList;
+  }
+
+  // Fetch Operation: Get all object from database
+  Future<List<Map<String, dynamic>>> getItemMap() async {
+    Database db = await this.database;
+
+    var result = await db.query(itemTable, orderBy: '$colDate ASC');
+    return result;
+  }
+
+  // Get the 'Map List' [ List<Map> ] and convert it to 'object List' [ List<Object> ]
+  Future<List<Item>> getAllItem() async {
+    var itemMap = await getItemMap();
+    int count = itemMap.length;
+
+    List<Item> itemList = List<Item>();
+    for (int i = 0; i < count; i++) {
+      itemList.add(Item.fromMapObject(itemMap[i]));
+    }
+
+    return itemList;
+  }
+
+  // Get sum of price in database
+  Future<List<Map<String, dynamic>>> getSumPrice() async {
+    Database db = await this.database;
+    List<Map<String, dynamic>> result;
+
+    result = await db.rawQuery('SELECT SUM($colPrice) AS outcome from $itemTable');
+
+    // int result = Sqflite.firstIntValue(x);
+    print(result);
+    return result;
   }
 }

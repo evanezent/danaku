@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:danaku/constant/constants.dart';
+import 'package:danaku/models/item.dart';
 import 'package:danaku/models/user.dart';
 import 'package:danaku/ui/pages/dashboard_page.dart';
 import 'package:danaku/ui/pages/form_user_page.dart';
@@ -16,12 +17,14 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   DatabaseHelper dbHelper = DatabaseHelper();
   List<User> userList;
+  int outcome = 0;
   int count = 0;
 
   void getInitData() {
     final Future<Database> dbFuture = dbHelper.initDatabase('user.db');
     dbFuture.then((database) {
       Future<List<User>> userListFuture = dbHelper.getAllUser();
+
       userListFuture.then((userList) {
         setState(() {
           this.userList = userList;
@@ -41,7 +44,9 @@ class _LandingPageState extends State<LandingPage> {
             ? Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => FormUser()))
             : Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Dashboard(userData: userList[0]))));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Dashboard(userData: userList[0]))));
   }
 
   @override

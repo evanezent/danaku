@@ -4,17 +4,20 @@ import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({
-    Key key, this.nickname, this.income, this.saving,
+    Key key,
+    this.nickname,
+    this.income,
+    this.saving,
+    this.outcome,
   }) : super(key: key);
 
   final String nickname;
   final double income;
   final double saving;
-
+  final double outcome;
 
   @override
   Widget build(BuildContext context) {
-
     FlutterMoneyFormatter fIncome = FlutterMoneyFormatter(amount: income);
     FlutterMoneyFormatter fSaving = FlutterMoneyFormatter(amount: saving);
     Size size = MediaQuery.of(context).size;
@@ -46,11 +49,19 @@ class DashboardHeader extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-          Text(
-            "Rp 1500000 / ${fIncome.output.nonSymbol}",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
-          ),
+          Container(
+              child: outcome != null
+                  ? Text(
+                      "Rp ${FlutterMoneyFormatter(amount: outcome).output.nonSymbol} / ${fIncome.output.nonSymbol}",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    )
+                  : LinearProgressIndicator(
+                      backgroundColor: Colors.white,
+                      valueColor: AlwaysStoppedAnimation(colorSecondary),
+                    )),
           SizedBox(height: 10),
           RichText(
             text: TextSpan(

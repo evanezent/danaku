@@ -8,11 +8,15 @@ class ReportItem extends StatelessWidget {
     @required this.size,
     this.itemName,
     this.itemPrice,
+    this.delFunction,
+    this.itemDate,
   }) : super(key: key);
 
   final Size size;
   final String itemName;
-  final String itemPrice;
+  final String itemDate;
+  final double itemPrice;
+  final Function delFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +49,22 @@ class ReportItem extends StatelessWidget {
                       ),
                       SizedBox(height: 3),
                       Text(
+                        itemDate,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[400],
+                            fontSize: 12),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
                         "Rp ${itemPrice}",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
                             color: colorPrimary,
                             fontSize: 14),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -60,16 +73,16 @@ class ReportItem extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        backgroundColor: Colors.transparent,
-                        content: Container(
-                            height: size.height * 0.4,
-                            child: FormOutcoume("Update", () {}, size.width)),
-                      );
-                    },
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.transparent,
+                      content: Container(
+                          height: size.height * 0.4,
+                          child: FormOutcoume("Update", () {}, size.width)),
                     );
+                  },
+                );
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -86,7 +99,7 @@ class ReportItem extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: delFunction,
               child: Container(
                 decoration: BoxDecoration(),
                 child: Padding(

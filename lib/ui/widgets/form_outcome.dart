@@ -1,11 +1,33 @@
 import 'package:danaku/constant/constants.dart';
+import 'package:danaku/models/item.dart';
+import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 Widget FormOutcoume(String buttonText, Function onClick, double size) {
   var _formKey = GlobalKey<FormState>();
 
   TextEditingController textItem = new TextEditingController();
   TextEditingController textPrice = new TextEditingController();
+
+  DatabaseHelper dbHelper = DatabaseHelper();
+  Item itemData;
+
+  // void _showAlertDialog(String title, String message) {
+  //   AlertDialog alertDialog = AlertDialog(
+  //     title: Text(title),
+  //     content: Text(message),
+  //   );
+  //   showDialog(context: context, builder: (_) => alertDialog);
+  // }
+
+  void addData() async {
+    String newDate = DateFormat.yMMMd().format(DateTime.now());
+    itemData = Item(textItem.text, double.parse(textPrice.text), newDate);
+
+    int res = await dbHelper.insertDB(itemData);
+    res == 0 ? print("FAILED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!") : print("${itemData} SUCCESS BOY !!!!");
+  }
 
   return Container(
     margin: EdgeInsets.only(top: 50),
@@ -38,7 +60,6 @@ Widget FormOutcoume(String buttonText, Function onClick, double size) {
                 boxShadow: darkShadow,
                 borderRadius: BorderRadius.circular(20)),
             child: TextFormField(
-              autofocus: false,
               controller: textItem,
               keyboardType: TextInputType.text,
               validator: (value) {
@@ -84,7 +105,6 @@ Widget FormOutcoume(String buttonText, Function onClick, double size) {
                 boxShadow: darkShadow,
                 borderRadius: BorderRadius.circular(20)),
             child: TextFormField(
-              autofocus: false,
               controller: textPrice,
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -119,7 +139,9 @@ Widget FormOutcoume(String buttonText, Function onClick, double size) {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               color: Colors.white,
-              onPressed: onClick,
+              onPressed: () {
+                addData();
+              },
               child: Text(
                 buttonText,
                 style: TextStyle(
