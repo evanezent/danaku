@@ -14,16 +14,17 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  User userData;
-  DatabaseHelper dbHelper = DatabaseHelper();
   bool isSuccess;
-  FToast fToast;
-
-  _ProfilePageState(this.userData);
-
+  bool _autoValidate = false;
+  final _formKey = GlobalKey<FormState>();
   var textNickname = new TextEditingController();
   var textIncome = new TextEditingController();
   var textSaving = new TextEditingController();
+
+  _ProfilePageState(this.userData);
+
+  User userData;
+  DatabaseHelper dbHelper = DatabaseHelper();
   List<User> userList;
   int count = 0;
 
@@ -40,27 +41,33 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void updateData(User user) async {
-    User newUser = User.withId(user.id, textNickname.text,
-        double.parse(textIncome.text), double.parse(textSaving.text));
-    int res = await dbHelper.updateDB(newUser);
+    if (_formKey.currentState.validate()) {
+      User newUser = User.withId(user.id, textNickname.text,
+          double.parse(textIncome.text), double.parse(textSaving.text));
+      int res = await dbHelper.updateDB(newUser);
 
-    if (res != 0) {
-      Fluttertoast.showToast(
-        msg: "Update Success",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: colorSecondary,
-        textColor: Colors.white,
-      );
-      updateUser(newUser);
+      if (res != 0) {
+        Fluttertoast.showToast(
+          msg: "Update Success",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: colorSecondary,
+          textColor: Colors.white,
+        );
+        updateUser(newUser);
+      } else {
+        Fluttertoast.showToast(
+          msg: "Update Failed !",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: colorBackup,
+          textColor: Colors.white,
+        );
+      }
     } else {
-      Fluttertoast.showToast(
-        msg: "Update Failed !",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: colorBackup,
-        textColor: Colors.white,
-      );
+      setState(() {
+        _autoValidate = true;
+      });
     }
   }
 
@@ -94,150 +101,152 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 50),
                 Form(
+                    key: _formKey,
+                    autovalidate: _autoValidate,
                     child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 18),
-                      child: Text(
-                        "What should we call you ?",
-                        style: TextStyle(
-                            color: colorSecondary,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: colorSecondary),
-                          color: Colors.white,
-                          boxShadow: darkShadow,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: TextFormField(
-                        controller: textNickname,
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Field empty !';
-                          } else if (value.length < 3) {
-                            return 'Field should be more than 3 charater';
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
-                            hintText: "nickname",
-                            labelText: "nickname",
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            labelStyle: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 18),
-                      child: Text(
-                        "Your Income for a Month",
-                        style: TextStyle(
-                            color: colorSecondary,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: colorSecondary),
-                          color: Colors.white,
-                          boxShadow: darkShadow,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: TextFormField(
-                        controller: textIncome,
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Field empty !';
-                          } else if (int.parse(value) <= 0) {
-                            return 'Value cannot be zero';
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20,
-                            ),
-                            hintText: "income",
-                            labelText: "income",
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            labelStyle: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 18),
-                      child: Text(
-                        "Your Saving for a Month",
-                        style: TextStyle(
-                            color: colorSecondary,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: colorSecondary),
-                          color: Colors.white,
-                          boxShadow: darkShadow,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: TextFormField(
-                        controller: textSaving,
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Field empty !';
-                          } else if (int.parse(value) <= 0) {
-                            return 'Value cannot be zero';
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20,
-                            ),
-                            hintText: "saving",
-                            labelText: "saving",
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            labelStyle: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none),
-                      ),
-                    ),
-                  ],
-                )),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 18),
+                          child: Text(
+                            "What should we call you ?",
+                            style: TextStyle(
+                                color: colorSecondary,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: colorSecondary),
+                              color: Colors.white,
+                              boxShadow: darkShadow,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: TextFormField(
+                            controller: textNickname,
+                            keyboardType: TextInputType.text,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Field empty !';
+                              } else if (value.length < 3) {
+                                return 'Field should be more than 3 charater';
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5),
+                                hintText: "nickname",
+                                labelText: "nickname",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 18),
+                          child: Text(
+                            "Your Income for a Month",
+                            style: TextStyle(
+                                color: colorSecondary,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: colorSecondary),
+                              color: Colors.white,
+                              boxShadow: darkShadow,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: TextFormField(
+                            controller: textIncome,
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Field empty !';
+                              } else if (int.parse(value) <= 0) {
+                                return 'Value cannot be zero';
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                hintText: "income",
+                                labelText: "income",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 18),
+                          child: Text(
+                            "Your Saving for a Month",
+                            style: TextStyle(
+                                color: colorSecondary,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: colorSecondary),
+                              color: Colors.white,
+                              boxShadow: darkShadow,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: TextFormField(
+                            controller: textSaving,
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Field empty !';
+                              } else if (int.parse(value) <= 0) {
+                                return 'Value cannot be zero';
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                hintText: "saving",
+                                labelText: "saving",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none),
+                          ),
+                        ),
+                      ],
+                    )),
                 SizedBox(height: 40),
                 Center(
                   child: RaisedButton(

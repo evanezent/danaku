@@ -6,6 +6,7 @@ import 'package:danaku/ui/pages/report_list_page.dart';
 import 'package:danaku/ui/widgets/dashboard_header.dart';
 import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -16,16 +17,18 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  User user;
   var _formKey = GlobalKey<FormState>();
-  DatabaseHelper dbHelper = DatabaseHelper();
-  Item itemData;
-  double outcome;
   var textItem = TextEditingController();
   var textPrice = TextEditingController();
 
+  User user;
+  Item itemData;
+  DatabaseHelper dbHelper = DatabaseHelper();
+  double outcome;
   List<User> userList;
   int count = 0;
+
+  bool _autoValidate = false;
 
   void getInitData() {
     final Future<Database> dbFuture = dbHelper.initDatabase('user.db');
@@ -40,25 +43,36 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  void _showAlertDialog(String title, String message) {
-    AlertDialog alertDialog = AlertDialog(
-      title: Text(title),
-      content: Text(message),
-    );
-    showDialog(context: context, builder: (_) => alertDialog);
-  }
-
   void addData() async {
-    String newDate = DateFormat.yMMMd().format(DateTime.now());
-    itemData = Item(textItem.text, double.parse(textPrice.text), newDate);
+    if (_formKey.currentState.validate()) {
+      String newDate = DateFormat.yMMMd().format(DateTime.now());
+      itemData = Item(textItem.text, double.parse(textPrice.text), newDate);
 
-    int res = await dbHelper.insertDB(itemData);
-    res == 0
-        ? _showAlertDialog("Failed", "Error while add data !")
-        : _showAlertDialog("Success", "Data successfully added !");
-
-    getOutcome();
-    _formKey.currentState.reset();
+      int res = await dbHelper.insertDB(itemData);
+      if (res != 0) {
+        Fluttertoast.showToast(
+          msg: "Successfully Added !",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: colorSecondary,
+          textColor: Colors.white,
+        );
+        getOutcome();
+        _formKey.currentState.reset();
+      } else {
+        Fluttertoast.showToast(
+          msg: "Failed to Add !",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: colorBackup,
+          textColor: Colors.white,
+        );
+      }
+    } else {
+      setState(() {
+        _autoValidate = true;
+      });
+    }
   }
 
   void getOutcome() {
@@ -177,6 +191,7 @@ class _DashboardState extends State<Dashboard> {
                   boxShadow: darkShadow),
               child: Form(
                 key: _formKey,
+                autovalidate: _autoValidate,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

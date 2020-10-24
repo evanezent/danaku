@@ -17,8 +17,8 @@ class _FormUserState extends State<FormUser> {
   User userData;
 
   bool _autoValidate = false;
-  bool _isTrueBigger = true;
   final _formKey = GlobalKey<FormState>();
+  bool _isTrueBigger = true;
   TextEditingController textName = new TextEditingController();
   TextEditingController textIncome = new TextEditingController();
   TextEditingController textSaving = new TextEditingController();
