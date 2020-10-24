@@ -5,11 +5,11 @@ I think I really need some app to manage my income and expense :).
 ## About the App
 An offline mobile application that save all the data to the *android local storage*.
 
-    - Dashboard
+- Dashboard
     ![Dashboard](/dokumentasi/dashboard.jpg)
-    - Report List
+- Report List
     ![Report](/dokumentasi/report.jpg)
-    - Profile
+- Profile
     ![Profile](/dokumentasi/profile.jpg)
 
 ## Download the APK !
