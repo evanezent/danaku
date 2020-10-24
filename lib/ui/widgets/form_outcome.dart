@@ -45,8 +45,10 @@ class FormOutcome extends StatelessWidget {
         textColor: Colors.white,
       );
       // Callback for report list to update list
+      print("RESPONSE ==================== $res 1");
       this.onClick();
 
+      print("RESPONSE ==================== $res 2");
       // Callback for report item to dissmis dialog
       this.callbackDismiss();
     } else {
@@ -71,8 +73,9 @@ class FormOutcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    textItem.text = this.item != null ? this.item.getName : '' ;
-    textPrice.text = this.item != null ? this.item.getPrice.toStringAsFixed(0) : '';
+    textItem.text = this.item != null ? this.item.getName : '';
+    textPrice.text =
+        this.item != null ? this.item.getPrice.toStringAsFixed(0) : '';
     itemData = this.item;
 
     return Container(

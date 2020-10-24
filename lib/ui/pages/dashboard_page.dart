@@ -28,6 +28,22 @@ class _DashboardState extends State<Dashboard> {
   var textPrice = TextEditingController();
   _DashboardState(this.user);
 
+  List<User> userList;
+  int count = 0;
+
+  void getInitData() {
+    final Future<Database> dbFuture = dbHelper.initDatabase('user.db');
+    dbFuture.then((database) {
+      Future<List<User>> userListFuture = dbHelper.getAllUser();
+
+      userListFuture.then((val) {
+        setState(() {
+          this.user = val[0];
+        });
+      });
+    });
+  }
+
   void _showAlertDialog(String title, String message) {
     AlertDialog alertDialog = AlertDialog(
       title: Text(title),
@@ -79,6 +95,7 @@ class _DashboardState extends State<Dashboard> {
     //
     super.initState();
     this.getOutcome();
+    this.getInitData();
   }
 
   @override

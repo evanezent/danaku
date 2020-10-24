@@ -283,7 +283,12 @@ class _ReportListState extends State<ReportList> {
                             child: FormOutcome(
                               buttonText: "Add",
                               size: size.width,
-                              onClick: () {},
+                              onClick: () {
+                                updateItem();
+                              },
+                              callbackDismiss: () {
+                                Navigator.pop(context);
+                              },
                             )),
                       );
                     },
