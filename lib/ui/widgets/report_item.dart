@@ -2,6 +2,7 @@ import 'package:danaku/constant/constants.dart';
 import 'package:danaku/models/item.dart';
 import 'package:danaku/ui/widgets/form_outcome.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
 class ReportItem extends StatelessWidget {
   ReportItem({
@@ -57,7 +58,7 @@ class ReportItem extends StatelessWidget {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        "Rp ${item.getPrice}",
+                        item.getPrice != null ? 'Rp ${FlutterMoneyFormatter(amount: item.getPrice).output.nonSymbol}' : 0,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.w500,

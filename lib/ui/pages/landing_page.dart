@@ -54,10 +54,10 @@ class _LandingPageState extends State<LandingPage> {
         body: Stack(
           children: <Widget>[
             Center(
-              child: Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.wysiwyg, color: colorSecondary, size: 40),
+                  Image.asset("assets/images/danaku2.png", scale: 4),
                   Text(
                     "DANAKU",
                     style: TextStyle(
