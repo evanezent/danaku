@@ -1,9 +1,9 @@
 import 'package:danaku/constant/constants.dart';
 import 'package:danaku/models/user.dart';
+import 'package:danaku/ui/pages/dashboard_page.dart';
 import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:sqflite/sqflite.dart';
 
 class ProfilePage extends StatefulWidget {
   final User userData;
@@ -21,7 +21,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _ProfilePageState(this.userData);
 
-  final _formKey = GlobalKey<FormState>();
   var textNickname = new TextEditingController();
   var textIncome = new TextEditingController();
   var textSaving = new TextEditingController();
@@ -265,7 +264,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 Center(
                   child: RaisedButton(
                     onPressed: () {
-                      Navigator.pop(context, this.userData);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Dashboard()));
                       FocusScope.of(context).unfocus();
                     },
                     color: Colors.white,

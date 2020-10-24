@@ -34,20 +34,25 @@ class DashboardHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RichText(
-            text: TextSpan(
-              text: 'Halo ',
-              style: TextStyle(color: Colors.white, fontSize: 15),
-              children: <TextSpan>[
-                TextSpan(
-                    text: '$nickname !',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16)),
-              ],
-            ),
-          ),
+          nickname != ''
+              ? RichText(
+                  text: TextSpan(
+                    text: 'Halo ',
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '$nickname !',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16))
+                    ],
+                  ),
+                )
+              : LinearProgressIndicator(
+                  backgroundColor: Colors.white,
+                  valueColor: AlwaysStoppedAnimation(colorSecondary),
+                ),
           SizedBox(height: 10),
           Container(
               child: outcome != null

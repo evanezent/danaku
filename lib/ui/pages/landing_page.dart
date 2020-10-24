@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:danaku/constant/constants.dart';
-import 'package:danaku/models/item.dart';
 import 'package:danaku/models/user.dart';
 import 'package:danaku/ui/pages/dashboard_page.dart';
 import 'package:danaku/ui/pages/form_user_page.dart';
@@ -46,7 +44,7 @@ class _LandingPageState extends State<LandingPage> {
             : Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => Dashboard(userData: userList[0]))));
+                    builder: (context) => Dashboard())));
   }
 
   @override

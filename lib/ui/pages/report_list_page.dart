@@ -1,5 +1,6 @@
 import 'package:danaku/constant/constants.dart';
 import 'package:danaku/models/item.dart';
+import 'package:danaku/ui/pages/dashboard_page.dart';
 import 'package:danaku/ui/widgets/form_outcome.dart';
 import 'package:danaku/ui/widgets/report_item.dart';
 import 'package:danaku/utils/helper.dart';
@@ -308,7 +309,7 @@ class _ReportListState extends State<ReportList> {
                     fontWeight: FontWeight.w500)),
             TextButton(
                 onPressed: () {
-                  Navigator.pop(context, outcome);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
                   FocusScope.of(context).unfocus();
                 },
                 child: Text(

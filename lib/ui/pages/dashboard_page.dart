@@ -4,18 +4,15 @@ import 'package:danaku/models/user.dart';
 import 'package:danaku/ui/pages/profile_page.dart';
 import 'package:danaku/ui/pages/report_list_page.dart';
 import 'package:danaku/ui/widgets/dashboard_header.dart';
-import 'package:danaku/ui/widgets/form_outcome.dart';
 import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Dashboard extends StatefulWidget {
-  final User userData;
-
-  const Dashboard({Key key, this.userData}) : super(key: key);
+  const Dashboard({Key key}) : super(key: key);
   @override
-  _DashboardState createState() => _DashboardState(userData);
+  _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
@@ -26,7 +23,6 @@ class _DashboardState extends State<Dashboard> {
   double outcome;
   var textItem = TextEditingController();
   var textPrice = TextEditingController();
-  _DashboardState(this.user);
 
   List<User> userList;
   int count = 0;
@@ -74,7 +70,7 @@ class _DashboardState extends State<Dashboard> {
       sumPrice.then((value) {
         print("OUTCOME ==================> ${value[0]['outcome']}");
         value[0]['outcome'] == null ? temp = 0 : temp = value[0]['outcome'];
-        print("OUTCOME ==================> ${temp}");
+        print("OUTCOME ==================> $temp");
         setState(() {
           this.outcome = temp;
         });
@@ -110,10 +106,10 @@ class _DashboardState extends State<Dashboard> {
           children: [
             SizedBox(height: 20),
             DashboardHeader(
-              nickname: user.name,
-              income: user.income,
-              saving: user.saving,
-              outcome: outcome,
+              nickname: user != null ? user.name : '',
+              income: user != null ? user.income : 0,
+              saving: user != null ? user.saving : 0,
+              outcome: outcome != null ? outcome : null,
             ),
             SizedBox(height: size.height * 0.12),
             Container(
@@ -121,14 +117,13 @@ class _DashboardState extends State<Dashboard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () async {
-                      final newUser = await Navigator.push(
+                    onTap: () {
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProfilePage(
                                     userData: user,
                                   )));
-                      updateUser(newUser);
                     },
                     child: Container(
                       padding: EdgeInsets.all(16),
@@ -145,8 +140,8 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   SizedBox(width: 10),
                   GestureDetector(
-                    onTap: () async {
-                      final newOutcome = await Navigator.push(
+                    onTap: () {
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ReportList(
@@ -154,7 +149,6 @@ class _DashboardState extends State<Dashboard> {
                                     saving: user.saving,
                                     outcome: outcome,
                                   )));
-                      updateOutcome(newOutcome);
                     },
                     child: Container(
                       padding: EdgeInsets.all(16),

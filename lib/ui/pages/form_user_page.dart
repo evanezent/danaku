@@ -47,7 +47,7 @@ class _FormUserState extends State<FormUser> {
         });
       } else {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Dashboard(userData: userData)));
+            context, MaterialPageRoute(builder: (context) => Dashboard()));
       }
     } else {
       setState(() {

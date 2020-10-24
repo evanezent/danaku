@@ -45,10 +45,8 @@ class FormOutcome extends StatelessWidget {
         textColor: Colors.white,
       );
       // Callback for report list to update list
-      print("RESPONSE ==================== $res 1");
       this.onClick();
 
-      print("RESPONSE ==================== $res 2");
       // Callback for report item to dissmis dialog
       this.callbackDismiss();
     } else {
@@ -65,7 +63,7 @@ class FormOutcome extends StatelessWidget {
   void addItem(String name, String price) async {
     String newDate = DateFormat.yMMMd().format(DateTime.now());
     Item newItem = Item(name, double.parse(price), newDate);
-    print("Name ${name} === Price ${price}");
+    print("Name $name === Price $price");
 
     int res = await dbHelper.insertDB(newItem);
     toastMessage(res);
