@@ -7,15 +7,15 @@ An offline mobile application that save all the data to the *android local stora
 
 - Dashboard
 
-<img src="/dokumentasi/dashboard.jpg" width="100">
+<img src="/dokumentasi/dashboard.jpg" width="300">
 
 - Report List
 
-<img src="/dokumentasi/report.jpg" width="100">
+<img src="/dokumentasi/report.jpg" width="300">
 
 - Profile
 
-<img src="/dokumentasi/profile.jpg" width="100">
+<img src="/dokumentasi/profile.jpg" width="300">
 
 
 ## Download the APK !
