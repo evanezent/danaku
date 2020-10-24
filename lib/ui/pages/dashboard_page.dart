@@ -98,8 +98,6 @@ class _DashboardState extends State<Dashboard> {
               saving: user.saving,
               outcome: outcome,
             ),
-            // Text("${user.id}",
-            // style: TextStyle(fontSize: 30, color: Colors.white)),
             SizedBox(height: size.height * 0.12),
             Container(
               child: Row(
@@ -111,9 +109,7 @@ class _DashboardState extends State<Dashboard> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProfilePage(
-                                    name: user.name,
-                                    income: user.income,
-                                    saving: user.saving,
+                                    userData: user,
                                   )));
                       updateUser(newUser);
                     },

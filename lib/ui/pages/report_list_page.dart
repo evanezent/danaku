@@ -5,6 +5,7 @@ import 'package:danaku/ui/widgets/report_item.dart';
 import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ReportList extends StatefulWidget {
@@ -72,11 +73,21 @@ class _ReportListState extends State<ReportList> {
     print("ID ${item.getID}");
 
     int result = await dbHelper.deleteDB_ID(item.getID, "item");
-    if (result != 0) {
-      _showAlertDialog('Success', 'Data has been deleted !');
-    } else {
-      _showAlertDialog('Failed', 'Error Occured while deleting data');
-    }
+    result != 0
+        ? Fluttertoast.showToast(
+            msg: "Deleted !",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: colorSecondary,
+            textColor: Colors.white,
+          )
+        : Fluttertoast.showToast(
+            msg: "Delete Failed !",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: colorBackup,
+            textColor: Colors.white,
+          );
   }
 
   void getOutcome() {
@@ -92,6 +103,11 @@ class _ReportListState extends State<ReportList> {
         });
       });
     });
+  }
+
+  void updateItem() {
+    getItemList();
+    getOutcome();
   }
 
   @override
@@ -235,12 +251,11 @@ class _ReportListState extends State<ReportList> {
                         itemBuilder: (BuildContext context, int idx) {
                           return ReportItem(
                             size: size,
-                            itemName: itemData[idx].getName,
-                            itemPrice: itemData[idx].getPrice,
+                            item: itemData[idx],
                             delFunction: () {
                               _deleteItem(itemData[idx]);
                             },
-                            itemDate: itemData[idx].getDate,
+                            updateFunction: updateItem,
                           );
                         })),
           ],
@@ -265,7 +280,11 @@ class _ReportListState extends State<ReportList> {
                         backgroundColor: Colors.transparent,
                         content: Container(
                             height: size.height * 0.4,
-                            child: FormOutcoume("Add", () {}, size.width)),
+                            child: FormOutcome(
+                              buttonText: "Add",
+                              size: size.width,
+                              onClick: () {},
+                            )),
                       );
                     },
                   );

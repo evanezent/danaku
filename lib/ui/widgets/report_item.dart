@@ -1,22 +1,21 @@
 import 'package:danaku/constant/constants.dart';
+import 'package:danaku/models/item.dart';
 import 'package:danaku/ui/widgets/form_outcome.dart';
 import 'package:flutter/material.dart';
 
 class ReportItem extends StatelessWidget {
-  const ReportItem({
+  ReportItem({
     Key key,
     @required this.size,
-    this.itemName,
-    this.itemPrice,
     this.delFunction,
-    this.itemDate,
+    this.updateFunction,
+    this.item,
   }) : super(key: key);
 
   final Size size;
-  final String itemName;
-  final String itemDate;
-  final double itemPrice;
   final Function delFunction;
+  Function updateFunction;
+  final Item item;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class ReportItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        itemName,
+                        item.getName,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -49,7 +48,7 @@ class ReportItem extends StatelessWidget {
                       ),
                       SizedBox(height: 3),
                       Text(
-                        itemDate,
+                        item.getDate,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -58,7 +57,7 @@ class ReportItem extends StatelessWidget {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        "Rp ${itemPrice}",
+                        "Rp ${item.getPrice}",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -79,7 +78,15 @@ class ReportItem extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       content: Container(
                           height: size.height * 0.4,
-                          child: FormOutcoume("Update", () {}, size.width)),
+                          child: FormOutcome(
+                            buttonText: "Update",
+                            size: size.width,
+                            onClick: updateFunction,
+                            item: item,
+                            callbackDismiss: () {
+                              Navigator.pop(context);
+                            },
+                          )),
                     );
                   },
                 );

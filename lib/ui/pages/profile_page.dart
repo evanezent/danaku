@@ -4,32 +4,22 @@ import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sqflite/sqflite.dart';
-// import 'package:toast/toast.dart';
 
 class ProfilePage extends StatefulWidget {
-  final String name;
-  final double income;
-  final double saving;
-  final int id;
+  final User userData;
 
-  const ProfilePage({Key key, this.name, this.income, this.saving, this.id})
-      : super(key: key);
+  const ProfilePage({Key key, this.userData}) : super(key: key);
   @override
-  _ProfilePageState createState() =>
-      _ProfilePageState(name, income, saving, id);
+  _ProfilePageState createState() => _ProfilePageState(userData);
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final int _id;
-  final String name;
-  final double income;
-  final double saving;
   User userData;
   DatabaseHelper dbHelper = DatabaseHelper();
   bool isSuccess;
   FToast fToast;
 
-  _ProfilePageState(this.name, this.income, this.saving, this._id);
+  _ProfilePageState(this.userData);
 
   final _formKey = GlobalKey<FormState>();
   var textNickname = new TextEditingController();
@@ -41,12 +31,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-
-    fToast = FToast();
-    textNickname.text = this.name;
-    textIncome.text = this.income.toStringAsFixed(0);
-    textSaving.text = this.saving.toStringAsFixed(0);
-    userData = User.withId(this._id, this.name, this.income, this.saving);
+    textNickname.text = this.userData.name;
+    textIncome.text = this.userData.income.toStringAsFixed(0);
+    textSaving.text = this.userData.saving.toStringAsFixed(0);
   }
 
   void updateUser(User newUser) {
@@ -58,24 +45,24 @@ class _ProfilePageState extends State<ProfilePage> {
         double.parse(textIncome.text), double.parse(textSaving.text));
     int res = await dbHelper.updateDB(newUser);
 
-    res == 0
-        ? Fluttertoast.showToast(
-            msg: "Update Success",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: colorSecondary,
-            textColor: Colors.white,
-          )
-        : Fluttertoast.showToast(
-            msg: "Update Failed !",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: colorBackup,
-            textColor: Colors.white,
-          );
-    this.userData.setName = textNickname.text;
-    this.userData.setIncome = textIncome.text;
-    this.userData.setSaving = textSaving.text;
+    if (res != 0) {
+      Fluttertoast.showToast(
+        msg: "Update Success",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: colorSecondary,
+        textColor: Colors.white,
+      );
+      updateUser(newUser);
+    } else {
+      Fluttertoast.showToast(
+        msg: "Update Failed !",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: colorBackup,
+        textColor: Colors.white,
+      );
+    }
   }
 
   @override

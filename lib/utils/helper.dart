@@ -66,8 +66,10 @@ class DatabaseHelper {
     var result;
 
     if (data is User) {
+      print("${data.id} =============================================");
       result = await db.insert(userTable, data.toMap());
     } else if (data is Item) {
+      print("${data.getID} =============================================");
       result = await db.insert(itemTable, data.toMap());
     }
 
@@ -180,7 +182,8 @@ class DatabaseHelper {
     Database db = await this.database;
     List<Map<String, dynamic>> result;
 
-    result = await db.rawQuery('SELECT SUM($colPrice) AS outcome from $itemTable');
+    result =
+        await db.rawQuery('SELECT SUM($colPrice) AS outcome from $itemTable');
 
     // int result = Sqflite.firstIntValue(x);
     print(result);
