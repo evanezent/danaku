@@ -6,11 +6,17 @@ I think I really need some app to manage my income and expense :).
 An offline mobile application that save all the data to the *android local storage*.
 
 - Dashboard
-![Dashboard](/dokumentasi/dashboard.jpg)
+
+<img src="/dokumentasi/dashboard.jpg" width="100">
+
 - Report List
-![Report](/dokumentasi/report.jpg)
+
+<img src="/dokumentasi/report.jpg" width="100">
+
 - Profile
-![Profile](/dokumentasi/profile.jpg)
+
+<img src="/dokumentasi/profile.jpg" width="100">
+
 
 ## Download the APK !
-![Download APK](https://drive.google.com/drive/folders/1H7BG3iduVcXOj1e5-adX9jpuwcb8Z6-l?usp=sharing)
+[Download APK](https://drive.google.com/drive/folders/1H7BG3iduVcXOj1e5-adX9jpuwcb8Z6-l?usp=sharing)
