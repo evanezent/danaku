@@ -3,7 +3,7 @@
 I think I really need some app to manage my income and expense :).
 
 ## About the App
-An offline mobile application that save all the data to the *android local storage*.
+An offline mobile application to help you monitoring your daily use of money that save all the data to the *android local storage*.
 
 - Dashboard
 
