@@ -273,8 +273,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 Center(
                   child: RaisedButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Dashboard()));
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
+                      Navigator.pop(context);
                       FocusScope.of(context).unfocus();
                     },
                     color: Colors.white,

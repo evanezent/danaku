@@ -137,7 +137,7 @@ class _DashboardState extends State<Dashboard> {
                           MaterialPageRoute(
                               builder: (context) => ProfilePage(
                                     userData: user,
-                                  )));
+                                  ))).then((value) => getInitData());
                     },
                     child: Container(
                       padding: EdgeInsets.all(16),
@@ -155,12 +155,14 @@ class _DashboardState extends State<Dashboard> {
                   SizedBox(width: 10),
                   GestureDetector(
                     onTap: () {
-                      MaterialPageRoute(
-                          builder: (context) => ReportList(
-                                income: user.income,
-                                saving: user.saving,
-                                outcome: outcome,
-                              ));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ReportList(
+                                    income: user.income,
+                                    saving: user.saving,
+                                    outcome: outcome,
+                                  ))).then((value) => getOutcome());
                     },
                     child: Container(
                       padding: EdgeInsets.all(16),
