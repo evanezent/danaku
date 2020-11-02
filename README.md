@@ -1,4 +1,4 @@
-# danaku v.0.1
+# danaku v.0.2
 
 I think I really need some app to manage my income and expense :).
 
