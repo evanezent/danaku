@@ -1,17 +1,22 @@
-# danaku
+# danaku v.0.1
 
-A new Flutter project.
+I think I really need some app to manage my income and expense :).
 
-## Getting Started
+## About the App
+An offline mobile application to help you monitoring your daily use of money that save all the data to the *android local storage*.
 
-This project is a starting point for a Flutter application.
+- Dashboard
 
-A few resources to get you started if this is your first Flutter project:
+<img src="/dokumentasi/dashboard.jpg" width="300">
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Report List
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-Urgent ! I really need an application to manage my income and expenses
+<img src="/dokumentasi/report.jpg" width="300">
+
+- Profile
+
+<img src="/dokumentasi/profile.jpg" width="300">
+
+
+## Download the APK !
+[Download APK](https://drive.google.com/drive/folders/1H7BG3iduVcXOj1e5-adX9jpuwcb8Z6-l?usp=sharing)

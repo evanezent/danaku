@@ -1,6 +1,9 @@
 import 'package:danaku/constant/constants.dart';
+import 'package:danaku/models/user.dart';
 import 'package:danaku/ui/pages/dashboard_page.dart';
+import 'package:danaku/ui/widgets/button_primary.dart';
 import 'package:danaku/ui/widgets/first_form_header.dart';
+import 'package:danaku/utils/helper.dart';
 import 'package:flutter/material.dart';
 
 class FormUser extends StatefulWidget {
@@ -9,19 +12,43 @@ class FormUser extends StatefulWidget {
 }
 
 class _FormUserState extends State<FormUser> {
+  // Initializing Database
+  DatabaseHelper dbHelper = DatabaseHelper();
+  User userData;
+
   bool _autoValidate = false;
   final _formKey = GlobalKey<FormState>();
+  bool _isTrueBigger = true;
   TextEditingController textName = new TextEditingController();
   TextEditingController textIncome = new TextEditingController();
   TextEditingController textSaving = new TextEditingController();
 
-  void register() {
+  void register() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       print("form validate");
+      print(textName.text);
+      print(textIncome.text);
+      print(textSaving.text);
 
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Dashboard()));
+      userData = User(textName.text, double.parse(textIncome.text),
+          double.parse(textSaving.text));
+
+      int result = await dbHelper.insertDB(userData);
+
+      result != 0
+          ? _showAlertDialog("Success", "Data successfully added !")
+          : _showAlertDialog("Failed", "Error while add data !");
+
+      // if INCOME IS LESS THAN SAVING
+      if (int.parse(textSaving.text) >= int.parse(textIncome.text)) {
+        setState(() {
+          _isTrueBigger = false;
+        });
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Dashboard()));
+      }
     } else {
       setState(() {
         _autoValidate = true;
@@ -29,152 +56,144 @@ class _FormUserState extends State<FormUser> {
     }
   }
 
+  void _showAlertDialog(String title, String message) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    showDialog(context: context, builder: (_) => alertDialog);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: colorPrimary,
-      body: Container(
-        child: Column(
-          children: [
-            FirstFormHeader(size: size),
-            SizedBox(height: 100),
-            Form(
-              key: _formKey,
-              autovalidate: _autoValidate,
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: darkShadow,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: TextFormField(
-                      controller: textName,
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value.length < 3) {
-                          print('is empty');
-                          return 'Field should be more than 3 charater';
-                        } else if (value.length >= 15) {
-                          return 'Field should be less than 15 charater';
-                        }
-                      },
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          hintText: "Nickname",
-                          labelText: "Nickname",
-                          hintStyle: TextStyle(
-                            color: colorPrimary,
-                          ),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none),
-                    ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          child: Column(
+            children: [
+              FirstFormHeader(size: size),
+              SizedBox(height: 100),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Form(
+                  key: _formKey,
+                  autovalidate: _autoValidate,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: darkShadow,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: TextFormField(
+                          controller: textName,
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value.isEmpty || value.length <= 0) {
+                              return 'Field empty !';
+                            } else if (value.length < 3) {
+                              return 'Field should be more than 3 charater';
+                            } else if (value.length >= 15) {
+                              return 'Field should be less than 15 charater';
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              hintText: "Nickname",
+                              labelText: "Nickname",
+                              hintStyle: TextStyle(
+                                color: colorPrimary,
+                              ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: darkShadow,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: TextFormField(
+                          controller: textIncome,
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value.isEmpty || value.length <= 0) {
+                              return 'Field empty !';
+                            } else if (int.parse(value) <= 0) {
+                              return 'Value cannot be zero';
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              hintText: "Income",
+                              labelText: "Income",
+                              hintStyle: TextStyle(
+                                color: colorPrimary,
+                              ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: darkShadow,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: TextFormField(
+                          controller: textSaving,
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value.isEmpty || value.length <= 0) {
+                              return 'Field empty !';
+                            } else if (int.parse(value) <= 0) {
+                              return 'Value cannot be zero';
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              hintText: "Saving",
+                              labelText: "Saving",
+                              hintStyle: TextStyle(
+                                color: colorPrimary,
+                              ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: darkShadow,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: TextFormField(
-                      controller: textIncome,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (int.parse(value) <= 0) {
-                          print('is empty');
-                          return 'Value cannot be zero';
-                        } else if (value.length < 0) {
-                          return 'Field empty !';
-                        }
-                      },
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          hintText: "Income",
-                          labelText: "Income",
-                          hintStyle: TextStyle(
-                            color: colorPrimary,
-                          ),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: darkShadow,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: TextFormField(
-                      controller: textSaving,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (int.parse(value) <= 0) {
-                          print('is empty');
-                          return 'Value cannot be zero';
-                        } else if (value.length < 0) {
-                          return 'Field empty !';
-                        }
-                      },
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          hintText: "Saving",
-                          labelText: "Saving",
-                          hintStyle: TextStyle(
-                            color: colorPrimary,
-                          ),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-            SizedBox(height: 50),
-            ButtonPrimary(
-              text: "Submit",
-              onClick: () {
-                register();
-              },
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ButtonPrimary extends StatelessWidget {
-  final Function onClick;
-  final String text;
-
-  const ButtonPrimary({Key key, this.onClick, this.text}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      color: Colors.white,
-      onPressed: onClick,
-      child: Container(
-        width: 330,
-        height: 50,
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              color: colorSecondary,
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
-            ),
+              SizedBox(height: 50),
+              ButtonPrimary(
+                text: "Submit",
+                onClick: () {
+                  register();
+                },
+              ),
+              Text(
+                _isTrueBigger ? "" : "Income is less than saving",
+                style: TextStyle(color: Colors.red),
+              )
+            ],
           ),
         ),
       ),

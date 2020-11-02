@@ -12,9 +12,10 @@ class FirstFormHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(top: 50, left: 20, right: 20),
       padding: EdgeInsets.all(10),
       width: size.width,
-      height: 200,
+      height: 170,
       decoration: BoxDecoration(
           color: colorSecondary,
           borderRadius: BorderRadius.circular(25),
@@ -25,13 +26,13 @@ class FirstFormHeader extends StatelessWidget {
         children: [
           SizedBox(height: 20),
           Text(
-            "Halo !",
+            "Hello !",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
           ),
           SizedBox(height: 10),
           Text(
-            "Sebelum lanjut, izinkan kita tahu tentang kamu dulu ya",
+            "Before we start, let us know about you and how much the money that you want to save for a month",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16),
           )
