@@ -132,7 +132,7 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProfilePage(
@@ -155,14 +155,12 @@ class _DashboardState extends State<Dashboard> {
                   SizedBox(width: 10),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ReportList(
-                                    income: user.income,
-                                    saving: user.saving,
-                                    outcome: outcome,
-                                  )));
+                      MaterialPageRoute(
+                          builder: (context) => ReportList(
+                                income: user.income,
+                                saving: user.saving,
+                                outcome: outcome,
+                              ));
                     },
                     child: Container(
                       padding: EdgeInsets.all(16),
