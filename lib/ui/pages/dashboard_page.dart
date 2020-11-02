@@ -82,9 +82,7 @@ class _DashboardState extends State<Dashboard> {
       Future<List<Map<String, dynamic>>> sumPrice = dbHelper.getSumPrice();
 
       sumPrice.then((value) {
-        print("OUTCOME ==================> ${value[0]['outcome']}");
         value[0]['outcome'] == null ? temp = 0 : temp = value[0]['outcome'];
-        print("OUTCOME ==================> $temp");
         setState(() {
           this.outcome = temp;
         });
